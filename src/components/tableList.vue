@@ -7,7 +7,7 @@
             <template #thead>
                 <vs-tr>
                     <vs-th>
-                        ID
+                        IDDDD
                     </vs-th>
                     <vs-th>
                         DATA
