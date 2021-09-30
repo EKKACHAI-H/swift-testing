@@ -23,7 +23,7 @@
             <template #tbody>
                 <vs-tr
                     :key="i"
-                    v-for="(tr, i) in $vs.getPage(users, page, max)"
+                    v-for="(tr, i) in $vs.getPage(dataTable, currentPage, maxRows)"
                     :data="tr"
                 >
                     <vs-td>
@@ -41,7 +41,7 @@
                 </vs-tr>
             </template>
             <template #footer>
-                <vs-pagination v-model="page" :length="$vs.getLength(users, max)" />
+                <vs-pagination v-model="currentPage" :length="$vs.getLength(dataTable, maxRows)" />
             </template>
         </vs-table>
     </div>
@@ -53,10 +53,9 @@ import moment from "moment";
 
 export default {
     data:() => ({
-        page: 1,
-        max: 10,
-        users: [],
-        active: 0
+        currentPage: 1,
+        maxRows: 10,
+        dataTable: [],
     }),
     computed: {},
     created() {},
@@ -83,7 +82,7 @@ export default {
                     }
                     dataTests.push(obj)
                 });
-                this.users = dataTests;
+                this.dataTable = dataTests;
             }
         }
     },
