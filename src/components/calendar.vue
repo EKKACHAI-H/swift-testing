@@ -36,7 +36,6 @@
 import Vue from 'vue';
 import VCalendar from 'v-calendar';
 import { apiDataTtntest } from '../service/api' 
-// import moment from "moment";
 
 Vue.use(VCalendar);
 export default {
