@@ -1,7 +1,7 @@
 <template>
     <div class="chart-page">
-        <div>
-            <p class="text-center">Chart</p>
+        <div class="topic-text">
+            Chart
         </div>
         <div class="text-center padding-date-picker">
             <a-range-picker 
@@ -88,17 +88,6 @@ export default {
             if (resTtntest.data.length > 0) {
                 loading.close()
                 this.resData = resTtntest.data;
-            //     const filteredData = resTtntest.data.filter(element => {
-            //         const startTime = new Date('2020-07-13T17:55:00')
-            //         const endTime = new Date('2020-07-13T18:00:00')
-            //         const currentTime = new Date(element.timestamp)
-            //         return currentTime >= startTime && currentTime <= endTime;
-            //     })
-            //     filteredData.sort(function(a, b) {
-            //         return new Date(a.timestamp) - new Date(b.timestamp);
-            //     });
-            //     this.filterData = filteredData;
-            //     console.log('filteredData :: ',filteredData)
             }
             this.filterDataDate('mouted');
         },
@@ -135,6 +124,9 @@ export default {
 </script>
 
 <style scoped>
+.chart-page {
+    padding: 20px;
+}
 .text-center {
     text-align: -webkit-center;
 }

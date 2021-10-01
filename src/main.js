@@ -6,6 +6,7 @@ import 'vuesax/dist/vuesax.css' //Vuesax styles
 import 'boxicons'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import '@/assets/mainStyle.css';
 Vue.config.productionTip = false;
 Vue.use(Antd);
 Vue.use(Vuesax);

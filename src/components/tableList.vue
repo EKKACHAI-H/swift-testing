@@ -1,7 +1,7 @@
 <template>
     <div class="tableList-page">
-        <div>
-            <p class="text-center">List Table</p>
+        <div class="topic-text">
+            List Table
         </div>
         <vs-table>
             <template #thead>
@@ -67,23 +67,28 @@ export default {
             const loading = this.$vs.loading({
                 text: 'Loading...'
             })
-            const resTtntest = await apiDataTtntest();
-            // console.log('resTtntest :: ',resTtntest.data)
-            if (resTtntest.data.length > 0) {
+            try {
+                const resTtntest = await apiDataTtntest();
+                if (resTtntest.data.length > 0) {
+                    loading.close()
+                    let obj = {};
+                    let dataTests = [];
+                    resTtntest.data.forEach(dataTest => {
+                        obj = {
+                            'data': dataTest.data ? dataTest.data : '-',
+                            'data2': dataTest.data2 ? dataTest.data2 : '-',
+                            'id': dataTest.id,
+                            'timestamp': moment(dataTest.timestamp).format('DD/MM/YYYY HH:mm:ss'),
+                        }
+                        dataTests.push(obj)
+                    });
+                    this.dataTable = dataTests;
+                }
+            } catch (error) {
+                console.error('error : ',error)
                 loading.close()
-                let obj = {};
-                let dataTests = [];
-                resTtntest.data.forEach(dataTest => {
-                    obj = {
-                        'data': dataTest.data ? dataTest.data : '-',
-                        'data2': dataTest.data2 ? dataTest.data2 : '-',
-                        'id': dataTest.id,
-                        'timestamp': moment(dataTest.timestamp).format('DD/MM/YYYY HH:mm:ss'),
-                    }
-                    dataTests.push(obj)
-                });
-                this.dataTable = dataTests;
             }
+            
         }
     },
     watch: {}

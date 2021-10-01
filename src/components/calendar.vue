@@ -1,7 +1,7 @@
 <template>
     <div class="calendar-page">
-        <div>
-            <p class="text-center">Calendar</p>
+        <div class="topic-text">
+            Calendar
         </div>
         <v-calendar
             class="custom-calendar max-w-full"
@@ -14,7 +14,7 @@
                 <div class="flex flex-col h-full z-10 overflow-hidden div-days" @click="openModal(day, attributes)">
                     <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
                     <div class="div-day">
-
+                        
                     </div>
                 </div>
             </template>
@@ -104,7 +104,6 @@ export default {
     created() {},
     mounted() {
         this.getApiTtntest();
-        // console.log('attributes :: ',this.attributes)
     },
     methods: {
         checkSameDate(first, second) {
@@ -125,33 +124,36 @@ export default {
             if (this.selectedDate === null || !this.checkSameDate(day.date, this.selectedDate)) {
                 this.selectedDate = day.date;
                 this.selectedData = this.filterDataByDate(day.date);
-                // console.log('this.selectedData :: ',this.selectedData)
             } 
         },
         getApiTtntest:async function() {
             const loading = this.$vs.loading({
                 text: 'Loading...'
             })
-            const resTtntest = await apiDataTtntest();
-            // console.log('resTtntest :: ',resTtntest.data)
-            if (resTtntest.data.length > 0) {
+            try {
+                const resTtntest = await apiDataTtntest();
+                if (resTtntest.data.length > 0) {
+                    loading.close()
+                    let obj = {};
+                    let dataTests = [];
+                    resTtntest.data.forEach(dataTest => {
+                        obj = {
+                            'key': dataTest.id,
+                            'customData': {
+                                'title': dataTest.data,
+                                'title2': dataTest.data,
+                            },
+                            'dates': new Date(dataTest.timestamp)
+                        }
+                        dataTests.push(obj)
+                    });
+                    this.resData = dataTests;
+                }
+            } catch (error) {
+                console.error('error : ',error)
                 loading.close()
-                let obj = {};
-                let dataTests = [];
-                resTtntest.data.forEach(dataTest => {
-                    obj = {
-                        'key': dataTest.id,
-                        'customData': {
-                            'title': dataTest.data,
-                            'title2': dataTest.data,
-                        },
-                        'dates': new Date(dataTest.timestamp)
-                    }
-                    dataTests.push(obj)
-                });
-                // console.log('dataTests :: ',dataTests)
-                this.resData = dataTests;
             }
+            
         }
     },
     watch: {}
