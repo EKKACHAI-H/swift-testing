@@ -11,16 +11,61 @@
             is-expanded
             >
             <template v-slot:day-content="{ day, attributes }">
-                <div class="flex flex-col h-full z-10 overflow-hidden" @click="openDialog(day, attributes)">
+                <div class="flex flex-col h-full z-10 overflow-hidden div-days" @click="openModal(day, attributes)">
                     <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
+                    <div class="div-day">
+
+                    </div>
                 </div>
             </template>
         </v-calendar>
         <div v-if="isOpenDateModal" class="dialog-data-date">
-            <div class="scroll-dialog">
+            <!-- <div class="scroll-dialog">
                 {{selectedData}}
-            </div>
-            <div class="text-right">
+            </div> -->
+            <vs-table>
+                <template #thead>
+                <vs-tr>
+                    <vs-th>
+                    ID
+                    </vs-th>
+                    <vs-th>
+                    Data
+                    </vs-th>
+                    <vs-th>
+                    Data 2
+                    </vs-th>
+                    <vs-th>
+                    Timestamp
+                    </vs-th>
+                </vs-tr>
+                </template>
+                <template #tbody>
+                <vs-tr
+                    :key="i"
+                    v-for="(tr, i) in $vs.getPage(selectedData, page, max)"
+                    :data="tr"
+                >
+                    <vs-td>
+                    {{ tr.key }}
+                    </vs-td>
+                    <vs-td>
+                    {{ tr.customData.title }}
+                    </vs-td>
+                    <vs-td>
+                    {{ tr.customData.title2 }}
+                    </vs-td>
+                    <vs-td>
+                    {{ tr.dates }}
+                    </vs-td>
+                </vs-tr>
+                </template>
+                <template #footer>
+                <vs-pagination v-model="page" :length="$vs.getLength(selectedData, max)" />
+                </template>
+            </vs-table>
+
+            <div class="text-webkit-center">
                 <vs-button
                     flat
                     @click="isOpenDateModal = false"
@@ -36,11 +81,14 @@
 import Vue from 'vue';
 import VCalendar from 'v-calendar';
 import { apiDataTtntest } from '../service/api' 
+// import moment from "moment";
 
 Vue.use(VCalendar);
 export default {
     data() {
         return {
+            page: 1,
+            max: 10,
             attributes: [],
             resData: [],
             filterDate: [],
@@ -56,7 +104,7 @@ export default {
     created() {},
     mounted() {
         this.getApiTtntest();
-        console.log('attributes :: ',this.attributes)
+        // console.log('attributes :: ',this.attributes)
     },
     methods: {
         checkSameDate(first, second) {
@@ -72,12 +120,12 @@ export default {
                 return this.checkSameDate(new Date(date), item.dates)
             })
         },
-        openDialog(day) {
+        openModal(day) {
             this.isOpenDateModal = true;
             if (this.selectedDate === null || !this.checkSameDate(day.date, this.selectedDate)) {
-                this.selectedData = this.filterDataByDate(day.date);
                 this.selectedDate = day.date;
-                console.log('this.selectedData :: ',this.selectedData)
+                this.selectedData = this.filterDataByDate(day.date);
+                // console.log('this.selectedData :: ',this.selectedData)
             } 
         },
         getApiTtntest:async function() {
@@ -85,7 +133,7 @@ export default {
                 text: 'Loading...'
             })
             const resTtntest = await apiDataTtntest();
-            console.log('resTtntest :: ',resTtntest.data)
+            // console.log('resTtntest :: ',resTtntest.data)
             if (resTtntest.data.length > 0) {
                 loading.close()
                 let obj = {};
@@ -101,7 +149,7 @@ export default {
                     }
                     dataTests.push(obj)
                 });
-                console.log('dataTests :: ',dataTests)
+                // console.log('dataTests :: ',dataTests)
                 this.resData = dataTests;
             }
         }
@@ -113,6 +161,10 @@ export default {
 <style lang="postcss" scoped>
 .text-center {
     text-align: center;
+}
+.text-webkit-center {
+    padding-top: 6px;
+    text-align: -webkit-center;
 }
 .text-right {
     text-align: -webkit-right;
@@ -126,11 +178,13 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 60%;
-    height: 500px;
     border-radius: 8px;
     -webkit-box-shadow: 0px 0px 14px 4px rgba(189,189,189,1);
     -moz-box-shadow: 0px 0px 14px 4px rgba(189,189,189,1);
     box-shadow: 0px 0px 14px 4px rgba(189,189,189,1);
+}
+.div-day {
+    height: 70px;
 }
 .scroll-dialog {
     height: 450px;

@@ -7,7 +7,7 @@
             <template #thead>
                 <vs-tr>
                     <vs-th>
-                        IDDDD
+                        ID
                     </vs-th>
                     <vs-th>
                         DATA
@@ -68,7 +68,7 @@ export default {
                 text: 'Loading...'
             })
             const resTtntest = await apiDataTtntest();
-            console.log('resTtntest :: ',resTtntest.data)
+            // console.log('resTtntest :: ',resTtntest.data)
             if (resTtntest.data.length > 0) {
                 loading.close()
                 let obj = {};
